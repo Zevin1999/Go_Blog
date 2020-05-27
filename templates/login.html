@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>登录</h1>
+            {% csrf_token %}
+            <form action="">
+                <div class="form-group">
+                    <label for="id_name">用户名</label>
+                    <input type="text" name="name" id="id_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="id_pwd">密码</label>
+                    <input type="password" name="pwd" id="id_pwd" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="id_code">验证码</label>
+                     <div class="row">
+                         <div class="col-md-6">
+                             <input type="text" name="code" id="id_code" class="form-control">
+                         </div>
+                         <div class="col-md-6">
+                             <img src="/app01/get_code/" height="45" width="300" id="id_img">
+                         </div>
+                     </div>
+
+                </div>
+                <input type="button" value="提交" class="btn btn-success" id="submit_btn"><span class="error" style="color: red"></span>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    //刷新验证码
+    $('#id_img').click(function(){
+        //当图片地址发生变化，会自主重新加载
+        $('#id_img')[0].src+= "?"
+    })
+    //提交操作
+    $('#submit_btn').click(function(){
+        $.ajax({
+            url:'/app01/login/',
+            type:'POST',
+            data:{
+                name:$("#id_name").val(),
+                pwd:$("#id_pwd").val(),
+                code:$("#id_code").val(),
+                csrfmiddlewaretoken:'{{csrf_token}}'
+
+            },
+            success:function(data){
+                console.log(data)
+                {#console.log(data.msg)#}
+                if(data.code == 100){
+                    //跳转
+                    location.href = "/app01/index/"
+                    {#location.href = data.url#}
+
+                }else{
+                    $(".error").text(data.msg)
+                }
+            }
+        })
+    })
+</script>
+
+
+</html>

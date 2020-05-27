@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <style>
+        .bottom_article span {
+            margin-right: 5px;
+        }
+    </style>
+    <title>首页</title>
+</head>
+<body>
+<h1>Welcome to GoBlog!</h1>
+<div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">GoBlog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">文章 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">随笔</a></li>
+                </ul>
+                {% if request.user.is_authenticated %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">{{ request.user.username }}</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">更多操作 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">修改密码</a></li>
+                                <li><a href="#">修改头像</a></li>
+                                <li><a href="/app01/logout/">退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% else %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/app01/login">登录</a></li>
+                        <li><a href="/app01/register">注册</a></li>
+                    </ul>
+                {% endif %}
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="panel panel-danger">
+                <div class="panel-heading">广告位</div>
+                <div class="panel-body">
+                    联系方式
+                </div>
+            </div>
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">百度链接</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="http://www.baidu.com">点击</a>
+                </div>
+            </div>
+
+             <div class="panel panel-danger">
+                <div class="panel-heading">广告位</div>
+                <div class="panel-body">
+                    联系方式
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-7">
+            {% for article in article_list %}
+                <div style="margin-bottom: 20px">
+                    <h4><a href="/app01/{{ article.blog.userinfo.username }}/article/{{ article.nid }}">{{ article.title }}</a></h4>
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="/app01/{{ article.blog.userinfo.username }}">
+                                <img class="media-object" src="/media/{{ article.blog.userinfo.avatar }}" height="60"
+                                     width="60">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            {{ article.desc }}
+                        </div>
+                    </div>
+                    <div class="bottom_article">
+                        <span><a href="/app01/{{ article.blog.userinfo.username }}">{{ article.blog.userinfo.username }}</a></span>
+                        <span>发布于 {{ article.create_time|date:'Y-m-d H:i' }}</span>
+                        {#数据库查询太慢，效率低<span>评论{{ article.commit_set.count }}</span>#}
+                        <span class="glyphicon glyphicon-comment">评论{{ article.commit_num }}</span>
+                        <span class="glyphicon glyphicon-thumbs-up">点赞{{ article.up_num }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-danger">
+                <div class="panel-heading">广告位</div>
+                <div class="panel-body">
+                    联系方式
+                </div>
+            </div>
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">百度链接</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="http://www.baidu.com">点击</a>
+                </div>
+            </div>
+
+             <div class="panel panel-danger">
+                <div class="panel-heading">广告位</div>
+                <div class="panel-body">
+                    联系方式
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
